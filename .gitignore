@@ -1,0 +1,7 @@
+__pycache__
+.vscode
+venv
+
+# react
+client/node_modules
+client/build
