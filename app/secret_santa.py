@@ -25,7 +25,7 @@ class SecretSanta:
 
         index = self.random_gen.randint(0, length - 1)
         picked = self.members_to_pick[index]
-        
+
         # Remove from file
         self.members_to_pick.remove(picked)
         return picked
@@ -39,8 +39,10 @@ class SecretSanta:
         for member in self.members_to_pick:
             print('   ' + member)
 
+'''
 
-def test_things():
+'''
+def run_code():
     user_input = 'bloop'
     ss = SecretSanta()
 
@@ -50,4 +52,4 @@ def test_things():
                \nThe winner is: ' + ss.pick_random())
         ss.print_members()
 
-test_things()
+run_code()
