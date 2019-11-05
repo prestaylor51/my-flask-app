@@ -1,16 +1,12 @@
 import random
+from os import path
 
 class SecretSanta:
     def __init__(self):
         # Load the members to pick 
-        self.members_to_pick = [
-            'Mom',
-            'Dad',
-            'Spencer',
-            'Jenny',
-            'Preston',
-            'Christena',
-        ]
+        self.members_to_pick = self.load_members()
+        print('Members from init:')
+        self.print_members()
         # Load the picked members
         self.picked_members = []
         self.random_gen = random
@@ -35,12 +31,28 @@ class SecretSanta:
         del self.members_to_pick[index]
 
     def print_members(self):
-        print('\nRemianing Members:')
         for member in self.members_to_pick:
             print('   ' + member)
 
-'''
+    def load_members(self):
+        # check for the file
+        if not path.exists("members.txt"):
+            f = open("members.txt", 'w')
+            f.write('Mom\n'  \
+                    'Dad\n' \
+                    'Spencer\n' \
+                    'Preston\n' \
+                    'Christena')
+            f.close()
+            return ['Mom', 'Dad', 'Spencer', 'Preston', 'Christena']
+        else:
+            f = open("members.txt", 'r')
+            return f.read().splitlines()
+         
 
+''' 
+RUN CODE
+    For testing the sercret santa code
 '''
 def run_code():
     user_input = 'bloop'
