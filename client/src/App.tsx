@@ -24,10 +24,16 @@ class App extends React.Component<any, State> {
     
   };
 
+  processInput = () => {
+
+  };
+
   public render() {
     const {data} = this.state;
     return <div className="App">
-        <p>{data ? data : 'There is no data to show'}</p>
+        <h1>Taylor Secret Santa Christmas Draw</h1>
+        <p>Enter your first name</p>
+        <input></input>
     </div>;
   }
 }
