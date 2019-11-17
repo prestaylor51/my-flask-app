@@ -2,6 +2,8 @@ import * as React from "react";
 import axios from "axios";
 import "./App.css";
 
+require('dotenv').config();
+
 interface State {
   data?: string;
 }
@@ -15,7 +17,8 @@ class App extends React.Component<any, State> {
   public componentDidMount = async () => {
 
     try {
-      const data = (await axios.get("http://localhost:5000/",{})).data
+        let host: string = process.env.SERVER ? process.env.SERVER : "HOST NOT DEFINED";
+      const data = (await axios.get(host,{})).data
       console.log("DATA:", data)
       this.setState({data : data.value});
     } catch(err) {
