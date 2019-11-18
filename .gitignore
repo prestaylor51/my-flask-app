@@ -4,7 +4,7 @@ venv
 
 # react
 client/node_modules
-client/build
+# client/build
 
 
 **/.env
