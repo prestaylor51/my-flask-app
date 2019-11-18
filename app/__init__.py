@@ -1,4 +1,4 @@
-from flask import Flask, Response, render_template
+from flask import Flask, Response, render_template, request
 import json
 from flask_cors import CORS
 
@@ -12,8 +12,15 @@ def serve_app():
     # result = {'value': 'the data'}
     # return Response(json.dumps(result), mimetype='application/json')
 
-# @app.route('/load-data')
-# def load_data():
+@app.route('/load-data')
+def load_data():
+    result = {'data': 'hello'}
+    return Response(json.dumps(result), mimetype='application/json')
 
+@app.route('/get-my-santaee', methods=['POST'])
+def get_santaee():
+    print(request.json)
+    thing = json.loads(request.data)
+    return Response(json.dumps(thing), mimetype='text/plain')
 
 # pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org flask_cors==3.0.7
