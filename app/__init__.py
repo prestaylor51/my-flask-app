@@ -1,14 +1,16 @@
-from flask import Flask, Response
+from flask import Flask, Response, render_template
 import json
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../client/build/static", template_folder="../client/build")
 CORS(app)
 
 @app.route('/')
-def getData():
-    result = {'value': 'the data'}
-    return Response(json.dumps(result), mimetype='application/json')
+def serve_app():
+    return render_template('index.html')
+# def getData():
+    # result = {'value': 'the data'}
+    # return Response(json.dumps(result), mimetype='application/json')
 
 # @app.route('/load-data')
 # def load_data():
