@@ -1,26 +1,35 @@
 from flask import Flask, Response, render_template, request
 import json
 from flask_cors import CORS
+import os
+from secretsanta import SecretSantaService
 
 app = Flask(__name__, static_folder="../client/build/static", template_folder="../client/build")
 CORS(app)
 
 @app.route('/')
 def serve_app():
-    return render_template('index.html')
-# def getData():
-    # result = {'value': 'the data'}
-    # return Response(json.dumps(result), mimetype='application/json')
+    env = os.getenv('FLASK_ENV')
+    if (env is not None and env == 'prod'):
+        print('App running in production')
+        return render_template('index.html')
+    else:
+        return Response('Development server. Frontend can be found at localhost:3000', mimetype='text/plain')
 
 @app.route('/load-data')
 def load_data():
     result = {'data': 'hello'}
     return Response(json.dumps(result), mimetype='application/json')
 
+'''
+GET MY SANTAEE
+    body: 
+        name -> name of secret santa
+'''
 @app.route('/get-my-santaee', methods=['POST'])
 def get_santaee():
+    service = SecretSantaService()
     print(request.json)
-    thing = json.loads(request.data)
-    return Response(json.dumps(thing), mimetype='text/plain')
+    return Response(service.members_to_pick, mimetype='text/plain')
 
 # pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org flask_cors==3.0.7

@@ -9,22 +9,23 @@ interface State {
 }
 
 class App extends React.Component<any, State> {
-  public constructor(props: any) {
-    super(props);
-    this.state = { data: "" };
-  }
+    public constructor(props: any) {
+        super(props);
+        this.state = { data: "" };
+    }
 
-  public componentDidMount = async () => {
+    public componentDidMount = async () => {
 
     try {
+        console.log(process.env.SERVER)
         let host: string = process.env.SERVER ? process.env.SERVER : "HOST NOT DEFINED";
-      const data = (await axios.get(host,{})).data
-      console.log("DATA:", data)
-      this.setState({data : data.value});
+        const data = (await axios.get(host,{})).data
+        console.log("DATA:", data)
+        this.setState({data : data.value});
     } catch(err) {
-      console.log(err)
+        console.log(err)
     }
-    
+
   };
 
   processInput = () => {
