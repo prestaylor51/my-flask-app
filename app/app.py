@@ -24,12 +24,14 @@ def load_data():
 '''
 GET MY SANTAEE
     body: 
-        name -> name of secret santa
+        code -> secret code for the santaee
 '''
 @app.route('/get-my-santaee', methods=['POST'])
 def get_santaee():
     service = SecretSantaService()
-    print(request.json)
-    return Response(service.members_to_pick, mimetype='text/plain')
+    body = request.json
+    print("code: " + body['code'])
+    santaee = service.get_santaee_from_code(body['code'])
+    return Response(santaee, mimetype='text/plain')
 
 # pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org flask_cors==3.0.7

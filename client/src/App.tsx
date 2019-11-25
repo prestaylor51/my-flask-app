@@ -5,39 +5,48 @@ import "./App.css";
 require('dotenv').config();
 
 interface State {
-  data?: string;
+  code: string;
+  santaee: string;
 }
 
 class App extends React.Component<any, State> {
     public constructor(props: any) {
         super(props);
-        this.state = { data: "" };
+        this.state = { 
+            code: "",
+            santaee: ""
+        };
     }
 
     public componentDidMount = async () => {
 
     try {
-        console.log(process.env.SERVER)
-        let host: string = process.env.SERVER ? process.env.SERVER : "HOST NOT DEFINED";
-        const data = (await axios.get(host,{})).data
-        console.log("DATA:", data)
-        this.setState({data : data.value});
+        const data = (await axios.get("/load-data",{})).data;
+        console.log("DATA:", data);
     } catch(err) {
-        console.log(err)
+        console.log(err);
     }
 
   };
 
-  processInput = () => {
-
+  getSantaee = async (): Promise<void> => {
+      // make the call and retrieve the santaee
+      const santaee: string = (await axios.post("/get-my-santaee",{code: this.state.code})).data;
+      console.log("RESULT:", santaee);
+      this.setState({santaee});
   };
 
   public render() {
-    const {data} = this.state;
+    // const {data} = this.state;
     return <div className="App">
         <h1>Taylor Secret Santa Christmas Draw</h1>
-        <p>Enter your first name</p>
-        <input></input>
+        <p>Enter Code</p>
+        <input onChange={(event: React.FormEvent<HTMLInputElement>) => 
+            {this.setState({code: event.currentTarget.value});}}>
+        </input>
+        <button onClick={() => {this.getSantaee()}}>Get Santaee</button>
+        <h1>Your Santaee</h1>
+        <h2>{this.state.santaee}</h2>
     </div>;
   }
 }
