@@ -1,5 +1,5 @@
 import random
-from os import path
+import os
 
 class SecretSantaService:
     def __init__(self):
@@ -21,7 +21,7 @@ class SecretSantaService:
 
     def get_santa_from_code(self, code):
         print("getting santa with code: " + code)
-        f = open("data/passcodes.txt", "r")
+        f = open("app/data/passcodes.txt", "r")
         passcodes = f.read().splitlines()
         for pass_str in passcodes:
             code_pair = pass_str.split(',')
@@ -32,7 +32,7 @@ class SecretSantaService:
         return Exception("Could not match code")
 
     def determine_match(self, member):
-        f = open("data/matches.txt", "r")
+        f = open("app/data/matches.txt", "r")
         match_lines = f.read().splitlines()
         f.close()
         if not match_lines:
@@ -52,8 +52,12 @@ class SecretSantaService:
             print('There are no more people!')
             return Exception("There are no more santas")
 
-        index = self.random_gen.randint(0, length - 1)
-        picked = self.members_to_pick[index]
+        picked = None
+
+        while (picked == None or picked == santa):
+            index = self.random_gen.randint(0, length - 1)
+            picked = self.members_to_pick[index]
+        
         print("picked member: " + picked)
 
         # Remove from file
@@ -65,14 +69,14 @@ class SecretSantaService:
         return picked
 
     def write_members(self, members):
-        f = open("data/members.txt", "w")
+        f = open("app/data/santaees_left.txt", "w")
         for member in members:
             f.write(f'{member}\n')
 
     def write_match(self, santa, picked):
         # save the match to the matches text
         print("wrtting to matches")
-        f = open("data/matches.txt", "a")
+        f = open("app/data/matches.txt", "a")
         f.write(f'{santa},{picked}\n')
         f.close()    
 
@@ -82,8 +86,9 @@ class SecretSantaService:
 
     def load_members(self):
         # check for the file
-        if not path.exists("data/members.txt"):
-            f = open("data/members.txt", 'w')
+        print(f'==================== {os.getcwd()}')
+        if not os.path.exists("app/data/santaees_left.txt"):
+            f = open("app/data/santaees_left.txt", 'w+')
             f.write('Mom\n'  \
                     'Dad\n' \
                     'Spencer\n' \
@@ -93,7 +98,7 @@ class SecretSantaService:
             f.close()
             return ['Mom', 'Dad', 'Spencer', 'Jenny', 'Preston', 'Christena']
         else:
-            f = open("data/members.txt", 'r')
+            f = open("app/data/santaees_left.txt", 'r')
             return f.read().splitlines()
          
 
