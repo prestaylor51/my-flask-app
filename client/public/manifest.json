@@ -3,7 +3,7 @@
   "name": "Create React App Sample",
   "icons": [
     {
-      "src": "santa-hat.png",
+      "src": "statis/santa-hat.png",
       "sizes": "256 x 256",
       "type": "image/x-icon"
     }
