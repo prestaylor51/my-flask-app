@@ -2,13 +2,16 @@ import random
 import os
 
 class SecretSantaService:
-    def __init__(self):
+    def __init__(self, conn):
         # Load the members to pick 
         self.members_to_pick = self.load_members()
         print('Members from init:')
         self.print_members()
         # Load the picked members
         
+        # Connect to DB
+        self.conn = conn
+
         self.random_gen = random
         self.random_gen.seed()
 

@@ -4,7 +4,10 @@ from flask_cors import CORS
 import os
 from app.secretsanta import SecretSantaService
 from dotenv import load_dotenv
+import psycopg2
 
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL)
 
 app = Flask(__name__, static_folder="../client/build/static", template_folder="../client/build")
 CORS(app)
@@ -32,7 +35,7 @@ GET MY SANTAEE
 '''
 @app.route('/get-my-santaee', methods=['POST'])
 def get_santaee():
-    service = SecretSantaService()
+    service = SecretSantaService(conn)
     body = request.json
     print("code: " + body['code'])
     santaee = service.get_santaee_from_code(body['code'])
