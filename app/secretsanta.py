@@ -11,6 +11,11 @@ class SecretSantaService:
         
         # Connect to DB
         self.conn = conn
+        cur = conn.cursor()
+        cur.execute("select * from santas")
+        rows = cur.fetchall()
+        print(rows)
+        cur.close()
 
         self.random_gen = random
         self.random_gen.seed()
@@ -23,6 +28,12 @@ class SecretSantaService:
         return self.determine_match(santa)
 
     def get_santa_from_code(self, code):
+
+        cur = self.conn.cursor()
+        cur.execute("select name from santas where code = %s", ('orange',))
+        row = cur.fetchone()
+        print(row)
+
         print("getting santa with code: " + code)
         f = open("app/data/passcodes.txt", "r")
         passcodes = f.read().splitlines()

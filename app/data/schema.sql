@@ -1,10 +1,8 @@
-create database secret_santa;
-use secret_santa;
 
 create table santas
 (
     id serial primary key,
-    code varchar(4),
+    code varchar(10),
     name varchar(256) 
 );
 
@@ -18,9 +16,9 @@ create table giver_receiver
 insert into santas
 (code, name)
 values
-(random_string(4), 'MOM' ),
-(random_string(4), 'DAD'),
-(random_string(4), 'SPENCER'),
-(random_string(4), 'JENNY'),
-(random_string(4), 'PRESTON'),
-(random_string(4), 'CHRISTENA');
+('ORANGE', 'MOM' ),
+('BEAR', 'DAD'),
+('ROCK', 'SPENCER'),
+('OAK', 'JENNY'),
+('SAND', 'PRESTON'),
+('OCEAN', 'CHRISTENA');
