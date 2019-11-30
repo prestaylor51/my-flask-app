@@ -1,5 +1,5 @@
 
-create table santas
+create table givers
 (
     id serial primary key,
     code varchar(10),
@@ -8,12 +8,12 @@ create table santas
 
 create table giver_receiver
 (
-    giver int references santas(id),
-    receiver int references santas(id),
+    giver int references givers(id),
+    receiver int references givers(id),
     constraint unique_giver_receiver unique(giver, receiver)
 );
 
-insert into santas
+insert into givers
 (code, name)
 values
 ('ORANGE', 'MOM' ),

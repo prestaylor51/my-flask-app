@@ -33,12 +33,12 @@ GET MY SANTAEE
     body: 
         code -> secret code for the santaee
 '''
-@app.route('/get-my-santaee', methods=['POST'])
+@app.route('/get-receiver', methods=['POST'])
 def get_santaee():
     service = SecretSantaService(conn)
     body = request.json
     print("code: " + body['code'])
-    santaee = service.get_santaee_from_code(body['code'])
+    santaee = service.get_receiver_from_code(body['code'])
     return Response(santaee, mimetype='text/plain')
 
 # pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org flask_cors==3.0.7
