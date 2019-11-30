@@ -8,8 +8,8 @@ create table givers
 
 create table giver_receiver
 (
-    giver int references givers(id),
-    receiver int references givers(id),
+    giver_id int references givers(id),
+    receiver_id int references givers(id),
     constraint unique_giver_receiver unique(giver, receiver)
 );
 

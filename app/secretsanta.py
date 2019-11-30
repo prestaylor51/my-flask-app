@@ -24,7 +24,7 @@ class SecretSantaService:
     """
     def load_givers(self):
         cur = self.conn.cursor()
-        cur.execute('select * from santas;')
+        cur.execute('select * from givers;')
         return cur.fetchall()
         
     """
@@ -32,19 +32,19 @@ class SecretSantaService:
     """
     def get_receiver_from_code(self, code):
         # get santa from code
-        santa = self.get_santa_from_code(code)
-        print("santa: " + santa)
+        giver = self.get_giver_from_code(code)
+        print("santa: " + giver[2])
         # from santa get match (from txt or make match)
-        return self.determine_match(santa)
+        return self.determine_match(giver)
 
     """
     GET SANTA FROM CODE
     """
-    def get_santa_from_code(self, code):
+    def get_giver_from_code(self, code):
 
         upper_code = code.upper()
         cur = self.conn.cursor()
-        cur.execute("select name from santas where code = %s", (upper_code,))
+        cur.execute("select * from givers where code = %s", (upper_code,))
         row = cur.fetchone()
         giver = row[0]
         print(f'giver: {giver}')
@@ -53,44 +53,21 @@ class SecretSantaService:
     '''
     DERTERMINE MATCH
     '''
-    def determine_match(self, member):
+    def determine_match(self, giver):
         print('called determine_match()')
         cur = self.conn.cursor()
-        cur.execute('select ')
+        cur.execute('select gr.receiver_id from giver_receiver gr \
+                    join givers g on gr.giver_id = g.id  \
+                    where g.name = %s;',(giver.upper(),))
+        row = cur.fetchone()
+        if row != None:
+            print(self.get_giver_by_id(row[0]))
+        else: print('giver has no receiver')
 
-    '''
-    PICK RANDOM
-    '''
-    def pick_random(self, santa):
-        length = len(self.members_to_pick)
-
-        if length == 0:
-            print('There are no more people!')
-            return Exception("There are no more santas")
-
-        picked = None
-
-        while (picked == None or picked == santa):
-            index = self.random_gen.randint(0, length - 1)
-            picked = self.members_to_pick[index]
-        
-        print("picked member: " + picked)
-
-        # Remove from file
-        self.members_to_pick.remove(picked)
-        self.write_members(self.members_to_pick)
-
-        # Add the santa to santa-matches
-        self.save_match(santa, picked)
-        return picked
-
-    '''
-    SAVE MATCH
-    '''
-    def save_match(self, santa, picked):
-        # save the match giver_receiver table
-        print('called save_match()')
-
+    def get_giver_by_id(self, id):
+        for giver in self.givers:
+            if giver[0] == id:
+                return giver
 
 ''' 
 RUN CODE
