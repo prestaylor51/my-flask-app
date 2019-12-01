@@ -10,7 +10,7 @@ create table giver_receiver
 (
     giver_id int references givers(id),
     receiver_id int references givers(id),
-    constraint unique_giver_receiver unique(giver, receiver)
+    constraint unique_giver_receiver unique(giver_id, receiver_id)
 );
 
 insert into givers
