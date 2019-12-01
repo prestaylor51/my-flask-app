@@ -25,7 +25,9 @@ class SecretSantaService:
     def load_givers(self):
         cur = self.conn.cursor()
         cur.execute('select * from givers;')
-        return cur.fetchall()
+        givers = cur.fetchall()
+        cur.close()
+        return givers
         
     """
     GET RECEIVER FROM CODE
@@ -33,7 +35,8 @@ class SecretSantaService:
     def get_receiver_from_code(self, code):
         # get santa from code
         giver = self.get_giver_from_code(code)
-        print("santa: " + giver[2])
+        print(giver)
+        print(f'santa: {giver[2]}')
         # from santa get match (from txt or make match)
         return self.determine_match(giver)
 
@@ -45,9 +48,9 @@ class SecretSantaService:
         upper_code = code.upper()
         cur = self.conn.cursor()
         cur.execute("select * from givers where code = %s", (upper_code,))
-        row = cur.fetchone()
-        giver = row[0]
-        print(f'giver: {giver}')
+        giver = cur.fetchone()
+        cur.close()
+        print(f'giver: {giver[2]}')
         return giver
 
     '''
@@ -56,13 +59,50 @@ class SecretSantaService:
     def determine_match(self, giver):
         print('called determine_match()')
         cur = self.conn.cursor()
-        cur.execute('select gr.receiver_id from giver_receiver gr \
-                    join givers g on gr.giver_id = g.id  \
-                    where g.name = %s;',(giver.upper(),))
+
+        # get the match if exists
+        cur.execute('select gr.* from givers g \
+                    join giver_receiver gr on gr.giver_id = g.id \
+                    where g.id = %s;',(giver[0],))
         row = cur.fetchone()
+        cur.close()
+
         if row != None:
-            print(self.get_giver_by_id(row[0]))
-        else: print('giver has no receiver')
+            print('giver has receiver already')
+            receiver = self.get_giver_by_id(row[1])
+            print(receiver)
+            return receiver[2]
+        else: 
+            # if no match for giver then create one
+            print('giver has no receiver')
+            return self.select_match_for_giver(giver)
+
+    # returns name of selected receiver
+    # use rowcount
+    def select_match_for_giver(self, giver):
+        cur = self.conn.cursor()
+        cur.execute('select g.id from givers g \
+                    where g.id not in (select receiver_id from giver_receiver);')
+        size = cur.rowcount
+        print(f'size: {size}')
+        rows = cur.fetchall()
+        cur.close()
+        print(f'rows: {rows}')
+        ran_index = self.random_gen.randint(0,size)
+        receiver_id = rows[ran_index][0]
+        print(f'index: {ran_index}')
+        print(f'row: {rows[ran_index]}')
+
+        # write giver_receiver row for giver and id
+        print(f'new receiver id: {receiver_id}')
+        self.save_giver_receiver(giver[0], receiver_id)
+        return self.get_giver_by_id(receiver_id)[2]
+
+    def save_giver_receiver(self, giver_id, receiver_id):
+        cur = self.conn.cursor()
+        cur.execute('insert into giver_receiver values (%s, %s);',(giver_id, receiver_id,))
+        self.conn.commit()
+        cur.close()
 
     def get_giver_by_id(self, id):
         for giver in self.givers:
