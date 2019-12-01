@@ -88,7 +88,7 @@ class SecretSantaService:
         rows = cur.fetchall()
         cur.close()
         print(f'rows: {rows}')
-        ran_index = self.random_gen.randint(0,size)
+        ran_index = self.random_gen.randint(0,size - 1)
         receiver_id = rows[ran_index][0]
         print(f'index: {ran_index}')
         print(f'row: {rows[ran_index]}')

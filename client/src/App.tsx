@@ -21,8 +21,8 @@ class App extends React.Component<any, State> {
     public componentDidMount = async () => {
 
     try {
-        const data = (await axios.get("/load-data",{})).data;
-        console.log("DATA:", data);
+        // const data = (await axios.get("/load-data",{})).data;
+        // console.log("DATA:", data);
     } catch(err) {
         console.log(err);
     }
@@ -31,7 +31,7 @@ class App extends React.Component<any, State> {
 
   getSantaee = async (): Promise<void> => {
       // make the call and retrieve the santaee
-      const santaee: string = (await axios.post("/get-my-santaee",{code: this.state.code})).data;
+      const santaee: string = (await axios.post("/get-receiver",{code: this.state.code})).data;
       console.log("RESULT:", santaee);
       this.setState({santaee});
   };
