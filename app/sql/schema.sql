@@ -21,4 +21,5 @@ values
 ('ROCK', 'SPENCER'),
 ('OAK', 'JENNY'),
 ('SAND', 'PRESTON'),
-('OCEAN', 'CHRISTENA');
+('OCEAN', 'CAP'),
+('SKY', 'OLIVE');
